@@ -13,7 +13,7 @@ function App() {
           header: true,
           complete: (result) => {
             const parsedData = result.data.map(entry => ({
-              index: entry["#"],
+              index: entry["number"],
               name: entry.pokemon_name,
               url: entry.pic_url
             }));
@@ -50,13 +50,18 @@ function App() {
 function Pokemon({ index, name, url }) {
   return (
     <div className="pokemon">
-      <img src={url} alt={name} />
-      <div className="details">
-        <span className="index">#{index}</span>
-        <span className="name">{name}</span>
-      </div>
-      <div className="back-side">
-        {/* You can add any content you want to display on the back side here */}
+      <div className="card">
+        <div className="card-front">
+          <img src={url} alt={name} />
+          <div className="details">
+            <span className="index">{index}</span>
+            <span className="name">{name}</span>
+          </div>
+        </div>
+        <div className="card-back">
+          {/* Add whatever you'd like on the back here, or just leave blank */}
+          <p>Back of card</p>
+        </div>
       </div>
     </div>
   );
