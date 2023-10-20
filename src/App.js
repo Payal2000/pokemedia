@@ -68,13 +68,15 @@
 // }
 
 
-// export default App;
+
 import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import './App.css';
 
 function App() {
   const [pokemons, setPokemons] = useState([]);
+  const [filter, setFilter] = useState('All');
+  const [filterValue, setFilterValue] = useState('All');
 
   useEffect(() => {
     fetch("https://raw.githubusercontent.com/Payal2000/Pokemon-Analysis/main/pokemon.csv")
@@ -91,7 +93,11 @@ function App() {
               defense: entry.defense,
               stamina: entry.stamina,
               cpRange: entry.cp_range,
-              hpRange: entry.hp_range
+              hpRange: entry.hp_range,
+              mainType: entry.main_type, // Assuming these fields exist
+              secondaryType: entry.secondary_type,
+              region: entry.region,
+              category: entry.category
             }));
             setPokemons(parsedData);
           }
@@ -99,11 +105,31 @@ function App() {
       });
   }, []);
 
+  const filteredPokemons = pokemons.filter(pokemon => {
+    if (filterValue === 'All') return true;
+    return pokemon[filter] === filterValue;
+  });
+
   return (
     <div className="app">
       <h1 className="header">Pokemedia</h1>
+      <div className="filters">
+        <select onChange={(e) => setFilter(e.target.value)}>
+          <option value="mainType">Main Type</option>
+          <option value="secondaryType">Secondary Type</option>
+          <option value="region">Region</option>
+          <option value="category">Category</option>
+        </select>
+        <select onChange={(e) => setFilterValue(e.target.value)}>
+          <option value="All">All</option>
+          {/* Dynamically generate options based on filter */}
+          {[...new Set(pokemons.map(pokemon => pokemon[filter]))].map(value => (
+            <option key={value} value={value}>{value}</option>
+          ))}
+        </select>
+      </div>
       <div className="grid">
-        {pokemons.map(pokemon => (
+        {filteredPokemons.map(pokemon => (
           <Pokemon key={pokemon.index} {...pokemon} />
         ))}
       </div>
