@@ -1,25 +1,66 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import Papa from 'papaparse';
 import './App.css';
 
 function App() {
+  const [pokemons, setPokemons] = useState([]);
+
+  useEffect(() => {
+    fetch("https://raw.githubusercontent.com/Payal2000/Pokemon-Analysis/main/pokemon.csv")
+      .then(response => response.text())
+      .then(data => {
+        Papa.parse(data, {
+          header: true,
+          complete: (result) => {
+            const parsedData = result.data.map(entry => ({
+              index: entry["#"],
+              name: entry.pokemon_name,
+              url: entry.pic_url
+            }));
+            setPokemons(parsedData);
+          }
+        });
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <h1 className="header">Pokemedia</h1>
+      <div className="grid">
+        {pokemons.map(pokemon => (
+          <Pokemon key={pokemon.index} {...pokemon} />
+        ))}
+      </div>
     </div>
   );
 }
+
+// function Pokemon({ index, name, url }) {
+//   return (
+//     <div className="pokemon">
+//       <img src={url} alt={name} />
+//       <div className="details">
+//         <span className="index">#{index}</span>
+//         <span className="name">{name}</span>
+//       </div>
+//     </div>
+//   );
+// }
+
+function Pokemon({ index, name, url }) {
+  return (
+    <div className="pokemon">
+      <img src={url} alt={name} />
+      <div className="details">
+        <span className="index">#{index}</span>
+        <span className="name">{name}</span>
+      </div>
+      <div className="back-side">
+        {/* You can add any content you want to display on the back side here */}
+      </div>
+    </div>
+  );
+}
+
 
 export default App;
