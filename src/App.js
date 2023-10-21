@@ -94,7 +94,7 @@ function App() {
               stamina: entry.stamina,
               cpRange: entry.cp_range,
               hpRange: entry.hp_range,
-              mainType: entry.main_type, // Assuming these fields exist
+              mainType: entry.main_type,
               secondaryType: entry.secondary_type,
               region: entry.region,
               category: entry.category
@@ -133,6 +133,7 @@ function App() {
           <Pokemon key={pokemon.index} {...pokemon} />
         ))}
       </div>
+      <Footer />
     </div>
   );
 }
@@ -157,6 +158,14 @@ function Pokemon({ index, name, url, attack, defense, stamina, cpRange, hpRange 
         </div>
       </div>
     </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <a href="mailto:nagaonkar.p@northeastern.edu">Contact Me: nagaonkar.p@northeastern.edu</a>
+    </footer>
   );
 }
 
